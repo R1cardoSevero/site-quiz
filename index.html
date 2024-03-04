@@ -1,0 +1,230 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <link rel="iconcut icon" href="icon.png">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Quiz Velozes e Furiosos</title>
+    <style>
+        @font-face {
+            font-family: font1;
+            src: url(Fastlynk.otf);
+        }
+
+        *{
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: Arial, sans-serif;
+            text-align: center;
+            background-image: url(background-velozes.jpeg);
+            background-size: cover;
+            background-repeat: no-repeat;
+            backdrop-filter: blur(10px);
+            height: 100vh;
+            width: 100vw;
+            overflow: hidden;
+        }
+
+        h1,
+        #pergunta {
+            font-family: font1;
+            text-shadow: 0px 0px 10px black;
+            color: white;
+            font-size: 40px;
+            text-shadow: 1px 1px 5px black;  
+        }
+
+        h1{
+            font-size: 60px;
+            animation: driving 5s cubic-bezier(0,1.57,.94,-0.32) infinite;
+        }
+
+        .quiz-container {
+            max-width: 500px;
+            margin: 0 auto;
+            padding-top: 40px;
+        }
+
+        #pergunta {
+            font-size: 24px;
+            margin-bottom: 20px;
+        }
+
+        #opcoes {
+            display: flex;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+
+
+        button {
+            padding: 10px 20px;
+            width: 100%;
+            margin: 10px;
+            font-size: 16px;
+            cursor: pointer;
+            text-align: left;
+            transition: all 0.5s;
+        }
+
+        .correto {
+            background-color: #8BC34A;
+        }
+
+        .incorreto {
+            background-color: #FF5722;
+        }
+
+        .correto, .incorreto{
+            height: 40px;
+        }
+
+        #pergunta{
+            font-family: sans-serif;
+            font-weight: 800;
+            padding-top: 20px;
+        }
+
+        button{
+            border-radius: 20px;
+            border: none; 
+            box-shadow: 1px 1px 5px black;  
+        }
+
+        button:hover{
+            transition: all 0.5s;
+            background-color: black;
+            color: white;
+            padding-left: 50px;
+        }
+
+        #resultado{
+            border-radius: 20px;
+            padding-top: 10px;
+        }
+
+        footer{
+            position: absolute;
+            bottom: 10px;
+            font-weight: 700;
+            color: white;
+            left: 50%;
+            transform: translate(-50%);
+        }
+
+        @keyframes driving {
+            to{
+                transform: translateX(100vw);
+            }
+            from{
+                transform: translateX(-100vw);
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <div class="quiz-container">
+        <h1>Velozes e Furiosos</h1>
+        <div id="pergunta"></div>
+        <div id="opcoes"></div>
+        <div id="resultado"></div>
+    </div>
+
+    <footer>Ricardo Müller Severo | 2023</footer>
+
+    <script>
+        const perguntas = [
+            {
+                pergunta: "Qual o verdadeiro nome de Brian?",
+                opcoes: ["Paul Walker", "Paul O'conner", "Brian Spilner", "Brian O'connor"],
+                resposta: "Paul Walker"
+            },
+            {
+                pergunta: "Em qual desses filmes Sean Boswell aparece?",
+                opcoes: ["Velozes e Furiosos 4; Velozes e Furiosos 9", "Velozes e Furiosos: desafio em Tóquio; Velozes e Furiosos 4", "Velozes e Furiosos 2; Velozes e Furiosos 4", "Velozes e Furiosos: desafio em Tóquio; Velozes e Furiosos 9"],
+                resposta: "Velozes e Furiosos: desafio em Tóquio; Velozes e Furiosos 9"
+            },
+            {
+                pergunta: "Em qual filme letty morre?",
+                opcoes: ["Velozes e Furiosos 6", "Velozes e Furiosos 4", "Velozes e Furiosos 2", "Velozes e Furiosos 5: Operação Rio"],
+                resposta: "Velozes e Furiosos 4"
+            },
+            {
+                pergunta: "Qual o motivo da morte do pai de Toretto?",
+                opcoes: ["Briga de rua", "Queda de Avião", "Acidente em corrida", "Assassinato"],
+                resposta: "Acidente em corrida"
+            },
+            {
+                pergunta: "O personagem Roman Pierce é conhecido por:",
+                opcoes: ["Sua eficiência com armas de fogo", "Ser o melhor piloto", "Ser um ótimo fugitivo", "Suas palhaçadas"],
+                resposta: "Suas palhaçadas"
+            },
+            {
+                pergunta: "Qual o nome do irmão de Dominic Toretto?",
+                opcoes: ["Deckhard Toretto", "Harry Toretto", "Jakob Toretto", "Luke Toretto"],
+                resposta: "Jakob Toretto"
+            },
+            {
+                pergunta: "Do que é o comércio dos toretto gerenciado por mia?",
+                opcoes: ["Seguradora de Veículos", "Oficina", "Cafeteria / Conveniência", "Oficina / Auto-Peças"],
+                resposta: "Oficina"
+            }
+            //Adicione mais Perguntas aqui!!! --->
+        ];
+        const perguntaElemento = document.getElementById("pergunta");
+        const opcoesElemento = document.getElementById("opcoes");
+        const resultadoElemento = document.getElementById("resultado");
+
+        let indicePerguntaAtual = 0;
+
+        function carregarPergunta() {
+            const perguntaAtual = perguntas[indicePerguntaAtual];
+            perguntaElemento.textContent = perguntaAtual.pergunta;
+
+            opcoesElemento.innerHTML = "";
+            perguntaAtual.opcoes.forEach(opcao => {
+                const botao = document.createElement("button");
+                botao.textContent = opcao;
+                botao.addEventListener("click", () => verificarResposta(opcao));
+                opcoesElemento.appendChild(botao);
+            });
+            resultadoElemento.textContent = "";
+            resultadoElemento.className = "";
+        }
+
+        function verificarResposta(respostaSelecionada) {
+            const perguntaAtual = perguntas[indicePerguntaAtual];
+            if (respostaSelecionada === perguntaAtual.resposta) {
+                resultadoElemento.textContent = "Resposta correta!";
+                resultadoElemento.className = "correto";
+            } else {
+                resultadoElemento.textContent = "Resposta incorreta. A resposta correta é: " + perguntaAtual.resposta;
+                resultadoElemento.className = "incorreto";
+            }
+
+            //Avança para próxima pergunta ou finaliza o quiz
+            indicePerguntaAtual++;
+            if (indicePerguntaAtual < perguntas.length) {
+                setTimeout(carregarPergunta, 2000); //Carrega próxima pergunta após 2 segundos
+            } else {
+                function quizConcluido() {
+                    resultadoElemento.textContent = "Quiz Concluído!";
+                    resultadoElemento.className = "";
+                }
+                setTimeout(quizConcluido, 2000)
+            }
+        }
+
+        //Carrega a primeira pergunta quando a página carrega
+        carregarPergunta();
+
+    </script>
+</body>
+
+</html>
